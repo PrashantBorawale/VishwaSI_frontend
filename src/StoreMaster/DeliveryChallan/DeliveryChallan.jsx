@@ -268,18 +268,25 @@ const DeliveryChallan = () => {
     };
 
     try {
+      const headers = { "Content-Type": "application/json" };
+      const token = localStorage.getItem("accessToken");
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
       const response = await fetch("https://sellerp-backend.onrender.com/Store/api/delivery-challans/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify(payload)
       });
       
       if (response.ok) {
         toast.success("Challan saved successfully");
-        setFormData1({ Plant: "VISHWA S.I.", DCSeries: "Services", DCType: "Select Type", Inventory: "Without Inventory", Supplier: "", AddressCode: "", ChallanNo: "", VehicleNo: "", Contractor: "", ChallanDate: "", Transport: "", EWayBillNo: "", PoNo: "", Ref_Person: "", LrNo: "", PoDate: "", Department: "", AssessableValue: "", CGST: "", SGST: "", IGST: "", GrandTotal: "", Remark: "" });
+        setFormData1({ Plant: "VISHWA S.I.", DCSeries: "", DCType: "Select Type", Inventory: "Without Inventory", Supplier: "", AddressCode: "", ChallanNo: "", VehicleNo: "", Contractor: "", ChallanDate: "", Transport: "", EWayBillNo: "", PoNo: "", Ref_Person: "", LrNo: "", PoDate: "", Department: "", AssessableValue: "", CGST: "", SGST: "", IGST: "", GrandTotal: "", Remark: "" });
         setChallans([]);
+        fetchDCNo();
       } else {
-        toast.error("Error saving challan");
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Error saving challan:", errorData);
+        toast.error(errorData?.detail || errorData?.message || "Error saving challan");
       }
     } catch (error) {
       toast.error("Error saving challan");
