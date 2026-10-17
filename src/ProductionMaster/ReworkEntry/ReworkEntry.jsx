@@ -125,23 +125,66 @@ const ReworkEntry = () => {
         setBomOperations(ops)
         if (ops.length > 0) {
           // Format: OPNo | PartCode
-          const firstOpDisplay = `${ops[0].OPNo} | ${ops[0].PartCode}`
+          const firstOpDisplay = `${ops[0].OPNo}|${ops[0].PartCode}`
           setPartCode(firstOpDisplay)
+          fetchHeatCodes(firstOpDisplay)
         } else {
           setPartCode(selectedPartCode)
+          fetchHeatCodes(selectedPartCode)
         }
       } catch (err) {
         console.error("Error fetching BOM operations for part_code:", err)
         setBomOperations([])
         setPartCode(selectedPartCode)
+        fetchHeatCodes(selectedPartCode)
       }
     } else {
       setBomOperations([])
       setPartCode("")
+      setHeatCodeList([])
+      setHeatCode("")
     }
   }
 
+  // Heat Code API State & Fetch
+  const [heatCodeList, setHeatCodeList] = useState([])
   const [heatCode, setHeatCode] = useState("")
+
+  const fetchHeatCodes = async (opnoVal) => {
+    if (!opnoVal || !opnoVal.trim()) {
+      setHeatCodeList([])
+      setHeatCode("")
+      return
+    }
+
+    try {
+      const res = await axios.get(
+        `https://sellerp-backend.onrender.com/Production/inward-qc-rework-reject/?opno=${encodeURIComponent(opnoVal.trim())}`
+      )
+      const data = res.data?.data || (Array.isArray(res.data) ? res.data : [])
+      setHeatCodeList(data)
+
+      if (data.length > 0) {
+        // Format: heat_no | Rework : rework_qty | Reject : reject_qty
+        const firstHeat = data[0]
+        const formattedHeat = `${firstHeat.heat_no} | Rework : ${firstHeat.rework_qty} | Reject : ${firstHeat.reject_qty}`
+        setHeatCode(formattedHeat)
+      } else {
+        setHeatCode("")
+      }
+    } catch (err) {
+      console.error("Error fetching heat codes:", err)
+      setHeatCodeList([])
+      setHeatCode("")
+    }
+  }
+
+  const handlePartCodeChange = (e) => {
+    const val = e.target.value
+    setPartCode(val)
+    fetchHeatCodes(val)
+  }
+
   const [reworkToOk, setReworkToOk] = useState("")
   const [rejectToOk, setRejectToOk] = useState("")
 
@@ -580,13 +623,13 @@ const ReworkEntry = () => {
                         <select
                           className="form-select"
                           value={partCode}
-                          onChange={(e) => setPartCode(e.target.value)}
+                          onChange={handlePartCodeChange}
                         >
                           {bomOperations.map((op, idx) => {
-                            const opDisplay = `${op.OPNo} | ${op.PartCode}`
+                            const opDisplay = `${op.OPNo}|${op.PartCode}`
                             return (
                               <option key={idx} value={opDisplay}>
-                                {opDisplay}
+                                {`${op.OPNo} | ${op.PartCode}`}
                               </option>
                             )
                           })}
@@ -596,7 +639,7 @@ const ReworkEntry = () => {
                           type="text"
                           className="form-control"
                           value={partCode}
-                          onChange={(e) => setPartCode(e.target.value)}
+                          onChange={handlePartCodeChange}
                           placeholder="OPNo | PartCode"
                         />
                       )}
@@ -605,15 +648,31 @@ const ReworkEntry = () => {
                     {/* Heat Code, Rework to Ok, Reject to Ok */}
                     <div className="col-md-4">
                       <label>Heat Code :</label>
-                      <select
-                        className="form-select"
-                        value={heatCode}
-                        onChange={(e) => setHeatCode(e.target.value)}
-                      >
-                        <option value="">Select</option>
-                        <option value="HEAT001">HEAT001</option>
-                        <option value="HEAT002">HEAT002</option>
-                      </select>
+                      {heatCodeList.length > 0 ? (
+                        <select
+                          className="form-select"
+                          value={heatCode}
+                          onChange={(e) => setHeatCode(e.target.value)}
+                        >
+                          <option value="">Select Heat Code</option>
+                          {heatCodeList.map((item, idx) => {
+                            const formatted = `${item.heat_no} | Rework : ${item.rework_qty} | Reject : ${item.reject_qty}`
+                            return (
+                              <option key={idx} value={formatted}>
+                                {formatted}
+                              </option>
+                            )
+                          })}
+                        </select>
+                      ) : (
+                        <select
+                          className="form-select"
+                          value={heatCode}
+                          onChange={(e) => setHeatCode(e.target.value)}
+                        >
+                          <option value="">Select</option>
+                        </select>
+                      )}
                     </div>
 
                     <div className="col-md-3">
@@ -673,10 +732,10 @@ const ReworkEntry = () => {
                             <tr key={index}>
                               <td className="text-center">{row.id || index + 1}</td>
                               <td>{row.item_des}</td>
-                              <td>{row.bom_part}</td>
-                              <td>{row.heat_code}</td>
-                              <td className="text-end">{row.rework_to_ok}</td>
-                              <td className="text-end">{row.reject_to_ok}</td>
+                              <td className="text-center">{row.bom_part}</td>
+                              <td className="text-center">{row.heat_code}</td>
+                              <td className="text-center fw-medium">{row.rework_to_ok}</td>
+                              <td className="text-center fw-medium">{row.reject_to_ok}</td>
                               <td className="text-center">
                                 <button
                                   type="button"
