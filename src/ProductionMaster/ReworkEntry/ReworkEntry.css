@@ -1,0 +1,254 @@
+/* ReworkEntry.css - Clean ERP Standard Matching ProductionEntry */
+
+.ReworkEntryMaster {
+  height: auto;
+  font-family: 'Inter', Arial, sans-serif;
+  overflow-x: hidden;
+  max-width: 100vw;
+  background-color: #f8fafc;
+}
+
+.ReworkEntryMaster .row,
+.ReworkEntryMaster .col-md-12,
+.ReworkEntryMaster .Main-NavBar {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.ReworkEntryMaster .main-content {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+  background-color: #f8fafc;
+  padding: 24px;
+}
+
+.ReworkEntryMaster .shifted {
+  margin-left: 250px !important;
+  width: calc(100% - 250px) !important;
+}
+
+/* ProductionEntry-style Header */
+.ReworkEntry-header {
+  background: linear-gradient(90deg, #f8fafc, #e2e8f0);
+  padding: 14px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.ReworkEntry-header .header-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #2563eb, #4f46e5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+/* Form Card Container */
+.ReworkEntry-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 20px;
+}
+
+/* Tabs Styling - Exactly matching ProductionEntry */
+.ReworkEntryMaster .nav-tabs {
+  border-bottom: 2px solid #e2e8f0;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.ReworkEntryMaster .nav-tabs .nav-link {
+  font-weight: 600;
+  color: #64748b;
+  padding: 10px 22px;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  transition: all 0.2s ease;
+  background: transparent !important;
+  border-radius: 0 !important;
+  cursor: pointer;
+  font-size: 0.88rem;
+}
+
+.ReworkEntryMaster .nav-tabs .nav-link:hover {
+  color: #2563eb;
+  border-bottom: 2px solid #93c5fd !important;
+}
+
+.ReworkEntryMaster .nav-tabs .nav-link.active {
+  color: #2563eb !important;
+  border-bottom: 2px solid #2563eb !important;
+  background: transparent !important;
+}
+
+/* Labels placed at top of fields with ERP standard typography */
+.ReworkEntryMaster label {
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+  text-align: left !important;
+  color: #334155 !important;
+  letter-spacing: 0.2px;
+}
+
+.ReworkEntryMaster .form-control,
+.ReworkEntryMaster .form-select {
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.82rem;
+  padding: 6px 10px;
+  min-height: 34px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+  color: #1e293b;
+  background-color: #ffffff;
+}
+
+.ReworkEntryMaster .form-control:focus,
+.ReworkEntryMaster .form-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  outline: none;
+}
+
+.ReworkEntryMaster .form-control[readonly] {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.ReworkEntryMaster .rework-no-highlight {
+  color: #dc2626 !important;
+  font-weight: 700 !important;
+}
+
+/* ERP Action Buttons */
+.ReworkEntryMaster .vndrbtn {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  border: none !important;
+  border-radius: 8px;
+  color: white !important;
+  padding: 7px 18px;
+  font-weight: 600;
+  font-size: 0.84rem;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3) !important;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.ReworkEntryMaster .vndrbtn:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af) !important;
+  color: white !important;
+}
+
+.ReworkEntryMaster .btn-outline-erp {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.ReworkEntryMaster .btn-outline-erp:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+/* Table Styling - Exactly matching ERP table typography */
+.ReworkEntryMaster .table-responsive {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  margin-top: 14px;
+  margin-bottom: 16px;
+}
+
+.ReworkEntryMaster .table {
+  width: 100% !important;
+  margin-bottom: 0;
+  border-collapse: collapse;
+}
+
+.ReworkEntryMaster .table th {
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border-bottom: 2px solid #e2e8f0;
+  border-top: none;
+  border-left: 1px solid #f1f5f9;
+  border-right: 1px solid #f1f5f9;
+  text-align: center;
+  padding: 10px 12px !important;
+  font-size: 0.72rem !important;
+  white-space: nowrap !important;
+  line-height: 1.2 !important;
+}
+
+.ReworkEntryMaster .table td {
+  padding: 8px 10px;
+  font-size: 0.8rem !important;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+  border-right: 1px solid #f1f5f9;
+  vertical-align: middle;
+  background-color: #ffffff;
+}
+
+.ReworkEntryMaster .table tbody tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* Operator Box */
+.rework-operator-box {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  height: 80px;
+  background: #f8fafc;
+  overflow-y: auto;
+  padding: 4px 8px;
+}
+
+.rework-operator-badge {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #e2e8f0;
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  color: #1e293b;
+}
+
+.rework-operator-badge svg {
+  cursor: pointer;
+  color: #64748b;
+}
+
+.rework-operator-badge svg:hover {
+  color: #ef4444;
+}

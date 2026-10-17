@@ -1105,6 +1105,10 @@ const SideNav = ({ sideNavOpen, toggleSideNav }) => {
                   </Link>
                 )}
 
+                <Link className="dropdown-item" to="/ReworkEntry">
+                  Rework Entry
+                </Link>
+
                 {/* {permissions.Production.includes("Rework Production") && (
                   <div className="nested-dropdown">
                     <div
@@ -1128,6 +1132,9 @@ const SideNav = ({ sideNavOpen, toggleSideNav }) => {
                           Rework Production Entry
                         </Link>
                       )}
+                      <Link className="dropdown-item" to="/ReworkEntry">
+                        Rework Entry
+                      </Link>
                       {permissions.Production.includes("Rework Production Report") && (
                         <Link className="dropdown-item" to="/ReworkProductionReport">
                           Rework Production Report

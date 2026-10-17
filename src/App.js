@@ -274,6 +274,7 @@ const ProductionEntry = React.lazy(() => import("./ProductionMaster/ProductionEn
 const ProductionReport = React.lazy(() => import("./ProductionMaster/ProductionReport/ProductionReport.jsx"));
 const ReworkProduction = React.lazy(() => import("./ProductionMaster/ReworkProduction/ReworkProduction.jsx"));
 const ReworkProductionEntry = React.lazy(() => import("./ProductionMaster/ReworkProduction/ReworkProductionEntry/ReworkProductionEntry.jsx"));
+const ReworkEntry = React.lazy(() => import("./ProductionMaster/ReworkEntry/ReworkEntry.jsx"));
 const ReworkProductionReport = React.lazy(() => import("./ProductionMaster/ReworkProduction/ReworkProductionReport/ReworkProductionReport.jsx"));
 const ScrapRejection = React.lazy(() => import("./ProductionMaster/ScrapRejection/ScrapRejection.jsx"));
 const ScrapRejectionReport = React.lazy(() => import("./ProductionMaster/ScrapRejection/ScrapRejectionReport/ScrapRejectionReport.jsx"));
@@ -816,6 +817,7 @@ function App() {
         <Route path="/NewIdleMaster" element={<NewIdleMaster />} />
         <Route path="/ReworkProduction" element={<ReworkProduction />} />
         <Route path="/ReworkProductionEntry" element={<ReworkProductionEntry />} />
+        <Route path="/ReworkEntry" element={<ReworkEntry />} />
         <Route path="/ReworkProductionReport" element={<ReworkProductionReport />} />
         <Route path="/ScrapRejection" element={<ScrapRejection />} />
         <Route path="/ScrapRejectionReport" element={<ScrapRejectionReport />} />
