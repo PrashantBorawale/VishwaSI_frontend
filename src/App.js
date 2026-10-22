@@ -256,6 +256,7 @@ const IndentQuery = React.lazy(() => import("./StoreMaster/Report/IndentReport/I
 const QueryIndt = React.lazy(() => import("./StoreMaster/Report/IndentReport/QueryIndt.jsx"));
 const IndentStatus = React.lazy(() => import("./StoreMaster/Report/IndentStatus/IndentStatus.jsx"));
 const WIPStock = React.lazy(() => import("./StoreMaster/StockReport/WIPStockReport/WIPStock.jsx"));
+const BalanceSheet = React.lazy(() => import("./StoreMaster/StockReport/BalanceSheet/BalanceSheet.jsx"));
 const RMStock = React.lazy(() => import("./StoreMaster/StockReport/RMStockReport/RMStock.jsx"));
 const ConsumableStock = React.lazy(() => import("./StoreMaster/StockReport/ConsumableStockReport/ConsumableStock.jsx"));
 const FGStock = React.lazy(() => import("./StoreMaster/StockReport/FGStockReport/FGStock.jsx"));
@@ -794,6 +795,7 @@ function App() {
         <Route path="QueryIndt" element={<QueryIndt />} />
         <Route path="IndentStatus" element={<IndentStatus />} />
         <Route path="WIPStock" element={<WIPStock />} />
+        <Route path="BalanceSheet" element={<BalanceSheet />} />
         <Route path="RMStock" element={<RMStock />} />
         <Route path="JobworkStockReport" element={<JobworkStockReport />} />
         <Route path="ConsumableStock" element={<ConsumableStock />} />
