@@ -126,7 +126,7 @@ const BalanceSheet = () => {
       "Stock": r.stock ?? r.total_stock ?? 0,
       "Bar": r.bar ?? r.bar_qty ?? 0,
       "Wire Rod": r.wire_rod ?? r.wire_rod_qty ?? 0,
-      "Shop Floor": r.shop_floor ?? r.shopfloor_qty ?? 0,
+      "Shop Floor": r.ShopFloor ?? r.shop_floor ?? r.shopfloor_qty ?? 0,
       "Rework": r.rework ?? r.rework_qty ?? 0,
       "Reject": r.reject ?? r.reject_qty ?? 0,
       "Invoice Qty": r.invoice_qty ?? r.inv_qty ?? 0,
@@ -308,7 +308,7 @@ const BalanceSheet = () => {
                                   <td>{r.stock ?? r.total_stock ?? 0}</td>
                                   <td>{r.bar ?? r.bar_qty ?? 0}</td>
                                   <td>{r.wire_rod ?? r.wire_rod_qty ?? 0}</td>
-                                  <td>{r.shop_floor ?? r.shopfloor_qty ?? 0}</td>
+                                  <td>{r.ShopFloor ?? r.shop_floor ?? r.shopfloor_qty ?? 0}</td>
                                   <td>{r.rework ?? r.rework_qty ?? 0}</td>
                                   <td>{r.reject ?? r.reject_qty ?? 0}</td>
                                   <td>{r.invoice_qty ?? r.inv_qty ?? 0}</td>
