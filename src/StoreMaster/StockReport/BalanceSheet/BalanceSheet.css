@@ -88,18 +88,19 @@
   padding: 0;
 }
 
-/* Screen-Fit Squished Table Setup */
+/* Screen-Fit Responsive Table Setup */
 .BalanceSheet .table-responsive {
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden !important; 
+  overflow-x: auto;
   background: transparent;
   display: block;
+  border-radius: 8px;
 }
 
 .BalanceSheet .table {
   width: 100% !important;
-  table-layout: auto;
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
   margin-bottom: 0;
@@ -109,19 +110,13 @@
 .BalanceSheet .table td {
   white-space: normal !important; 
   word-wrap: break-word;
-  overflow-wrap: anywhere;
   word-break: break-word;
-  font-size: 0.65rem !important; 
-  padding: 6px 4px !important; 
+  overflow-wrap: break-word;
+  font-size: 0.68rem !important; 
+  padding: 5px 3px !important; 
   text-align: center;
   vertical-align: middle;
-}
-
-/* Adjust 'Desc' column width to balance space gracefully */
-.BalanceSheet .table th:nth-child(3),
-.BalanceSheet .table td:nth-child(3) {
-  max-width: 250px !important;
-  width: 250px !important;
+  line-height: 1.25;
 }
 
 .BalanceSheet .table th {
