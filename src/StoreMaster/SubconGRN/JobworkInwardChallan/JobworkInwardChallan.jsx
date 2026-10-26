@@ -38,6 +38,7 @@ const JobworkInwardChallan = () => {
   const [currentRow, setCurrentRow] = useState({
     ItemCode: "",
     FGPartCode: "",
+    item_size: "",
     ChallanQty: "",
     GRNQty: "",
     GRNUnit: "",
@@ -198,7 +199,23 @@ const JobworkInwardChallan = () => {
 
   // When Item Code is selected (via suggestion click), load its FG Part Codes from bom_items
   const selectItemCode = (selectedKey) => {
-    setCurrentRow((prev) => ({ ...prev, ItemCode: selectedKey, FGPartCode: "" }));
+    const selectedItemObj = (selectedKey && bomItems[selectedKey]) ? bomItems[selectedKey] : null;
+    let autoItemSize = "";
+
+    if (selectedItemType === "RM") {
+      // RM uses Item_Size from backend (with fallbacks if needed)
+      autoItemSize = selectedItemObj?.Item_Size || selectedItemObj?.item_size || selectedItemObj?.size || selectedItemObj?.Size || "";
+    } else {
+      // FG/All uses item_size from backend
+      autoItemSize = selectedItemObj?.item_size || selectedItemObj?.Item_Size || selectedItemObj?.size || selectedItemObj?.Size || "";
+    }
+
+    setCurrentRow((prev) => ({
+      ...prev,
+      ItemCode: selectedKey,
+      FGPartCode: "",
+      item_size: autoItemSize,
+    }));
     setItemSearchTerm(selectedKey);
     setShowItemDropdown(false);
 
@@ -223,11 +240,18 @@ const JobworkInwardChallan = () => {
     const partCode = parts[1] || "";
     const operation = parts[2] || "";
 
+    // Find selected part object from fgPartCodeOptions to extract item_size if present
+    const matchedPart = fgPartCodeOptions.find(
+      (pc) => `${pc.OPNo} | ${pc.PartCode} | ${pc.Operation}` === selectedFull || pc.PartCode === partCode
+    );
+    const fgItemSize = matchedPart?.item_size || matchedPart?.Item_Size || matchedPart?.size || matchedPart?.Size || "";
+
     setCurrentRow(prev => ({
       ...prev,
       FGPartCode: selectedFull, // Store the full string for display
       FGPartCodeShort: partCode, // Keep a short version for internal logic if needed
-      ParticularNatureOfProcess: operation // Auto-fill Operation
+      ParticularNatureOfProcess: operation, // Auto-fill Operation
+      item_size: fgItemSize || prev.item_size // If part has specific item_size, use it, otherwise keep item's size
     }));
   };
 
@@ -254,6 +278,7 @@ const JobworkInwardChallan = () => {
     setCurrentRow({
       ItemCode: "",
       FGPartCode: "",
+      item_size: "",
       ChallanQty: "",
       GRNQty: "",
       GRNUnit: "",
@@ -338,6 +363,7 @@ const JobworkInwardChallan = () => {
     const JobworkInwardChallanTable = tableRows.map((row) => ({
       ItemCode: row.ItemCode,
       Operation: row.ParticularNatureOfProcess,
+      item_size: row.item_size || "",
       ChallanQty: row.ChallanQty,
       GRNQty: row.GRNQty,
       MaterialRate: row.MaterialRateChallan,
@@ -356,6 +382,7 @@ const JobworkInwardChallan = () => {
       SelectItem: "",
       ItemCode: tableRows[0]?.ItemCode || "",
       FGPartCode: (tableRows[0]?.FGPartCode || "").toUpperCase(),
+      item_size: tableRows[0]?.item_size || "",
       ChallanQty: tableRows[0]?.ChallanQty || "",
       GRNQty: tableRows[0]?.GRNQty || "",
       MaterialRate: tableRows[0]?.MaterialRateChallan || "",
@@ -529,32 +556,33 @@ const JobworkInwardChallan = () => {
                       <table className="table table-bordered">
                         <thead>
                           <tr>
-                            <th>
+                            <th style={{ minWidth: "150px", maxWidth: "180px", fontSize: "0.75rem", padding: "6px 8px" }}>
                               Select Item:
-                              <div className="d-flex">
-                                <label className="me-2"><input type="checkbox" name="selectAll" checked={selectedItemType === "All"} onChange={() => setSelectedItemType("All")} /> All</label>
-                                <label className="me-2"><input type="checkbox" name="selectRM" checked={selectedItemType === "RM"} onChange={() => setSelectedItemType("RM")} /> RM</label>
-                                <label><input type="checkbox" name="selectFG" checked={selectedItemType === "FG"} onChange={() => setSelectedItemType("FG")} /> FG</label>
+                              <div className="d-flex mt-1" style={{ fontSize: "0.75rem" }}>
+                                <label className="me-2 mb-0"><input type="checkbox" name="selectAll" checked={selectedItemType === "All"} onChange={() => setSelectedItemType("All")} /> All</label>
+                                <label className="me-2 mb-0"><input type="checkbox" name="selectRM" checked={selectedItemType === "RM"} onChange={() => setSelectedItemType("RM")} /> RM</label>
+                                <label className="mb-0"><input type="checkbox" name="selectFG" checked={selectedItemType === "FG"} onChange={() => setSelectedItemType("FG")} /> FG</label>
                               </div>
                             </th>
-                            <th>Inward Qty</th>
-                            <th>Material Rate</th>
-                            <th>Heat No</th>
-                            <th>Cust Heat No</th>
-                            <th>RM Specification</th>
-                            <th>Particular/Nature Of Process</th>
-                            <th>Action</th>
+                            <th style={{ width: "90px", minWidth: "80px", fontSize: "0.75rem", padding: "6px 8px" }}>Item Size</th>
+                            <th style={{ fontSize: "0.75rem", padding: "6px 8px" }}>Inward Qty</th>
+                            <th style={{ fontSize: "0.75rem", padding: "6px 8px" }}>Material Rate</th>
+                            <th style={{ fontSize: "0.75rem", padding: "6px 8px" }}>Heat No</th>
+                            <th style={{ fontSize: "0.75rem", padding: "6px 8px" }}>Cust Heat No</th>
+                            <th style={{ fontSize: "0.75rem", padding: "6px 8px" }}>RM Specification</th>
+                            <th style={{ fontSize: "0.75rem", padding: "6px 8px" }}>Particular/Nature Of Process</th>
+                            <th style={{ fontSize: "0.75rem", padding: "6px 8px" }}>Action</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td>
+                            <td style={{ minWidth: "150px", maxWidth: "180px", padding: "6px" }}>
                               <div className="d-flex mb-1 position-relative align-items-center" ref={itemDropdownRef}>
-                                <div className="input-group flex-nowrap" style={{ maxWidth: "200px" }}>
+                                <div className="input-group flex-nowrap w-100">
                                   <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Item Search..."
+                                    placeholder="Search..."
                                     value={itemSearchTerm}
                                     onChange={(e) => {
                                       const val = e.target.value;
@@ -566,15 +594,15 @@ const JobworkInwardChallan = () => {
                                       }
                                     }}
                                     onFocus={() => setShowItemDropdown(true)}
-                                    style={{ fontSize: "0.9rem" }}
+                                    style={{ fontSize: "0.75rem", padding: "3px 6px", height: "28px" }}
                                   />
-                                  <button className="btn btn-outline-secondary d-flex align-items-center" type="button" onClick={() => setShowItemDropdown(!showItemDropdown)}>
-                                    <FaSearch style={{ transform: "translateY(-1px)" }} />
+                                  <button className="btn btn-outline-secondary d-flex align-items-center px-2 py-0" type="button" onClick={() => setShowItemDropdown(!showItemDropdown)} style={{ height: "28px" }}>
+                                    <FaSearch size={11} />
                                   </button>
                                 </div>
 
                                 {showItemDropdown && itemSearchTerm && (
-                                  <ul className="list-group position-absolute w-100 z-3" style={{ top: "100%", left: 0, maxHeight: "200px", overflowY: "auto", fontSize: "0.85rem", border: "1px solid #ddd" }}>
+                                  <ul className="list-group position-absolute w-100 z-3" style={{ top: "100%", left: 0, maxHeight: "200px", overflowY: "auto", fontSize: "0.75rem", border: "1px solid #ddd" }}>
                                     {itemCodeOptions
                                       .filter(opt => opt.toLowerCase().includes(itemSearchTerm.toLowerCase()))
                                       .map((opt, idx) => (
@@ -595,16 +623,15 @@ const JobworkInwardChallan = () => {
                               </div>
                               {selectedItemType !== "RM" && (
                                 <div className="d-flex mt-1">
-                                  <label className="me-1 text-nowrap">FG Part Code:</label>
                                   <select
                                     name="FGPartCode"
-                                    className="form-select flex-grow-1"
+                                    className="form-select w-100"
                                     value={currentRow.FGPartCode}
                                     onChange={handleFGPartCodeChange}
                                     disabled={fgPartCodeOptions.length === 0}
-                                    style={{ paddingRight: "25px", minWidth: "250px", fontSize: "0.85rem" }}
+                                    style={{ padding: "2px 18px 2px 6px", fontSize: "0.75rem", height: "26px" }}
                                   >
-                                    <option value="">-- Select FG Part Code --</option>
+                                    <option value="">FG Part Code...</option>
                                     {fgPartCodeOptions.map((pc, idx) => {
                                       const fullVal = `${pc.OPNo} | ${pc.PartCode} | ${pc.Operation}`;
                                       return (
@@ -616,6 +643,17 @@ const JobworkInwardChallan = () => {
                                   </select>
                                 </div>
                               )}
+                            </td>
+                            <td style={{ width: "90px", minWidth: "80px", padding: "6px" }}>
+                              <input
+                                type="text"
+                                name="item_size"
+                                className="form-control text-center"
+                                placeholder="Size"
+                                value={currentRow.item_size}
+                                readOnly
+                                style={{ width: "100%", fontSize: "0.75rem", padding: "3px 6px", height: "28px", backgroundColor: "#f1f5f9", cursor: "default" }}
+                              />
                             </td>
                             <td>
                               <div className="d-flex mb-1">
@@ -721,6 +759,7 @@ const JobworkInwardChallan = () => {
                             <tr>
                               <th>Sr no.</th>
                               <th>Item Code</th>
+                              <th>Item Size</th>
                               <th>Operation</th>
                               <th>Challan Qty</th>
                               <th>GRN Qty</th>
@@ -736,7 +775,7 @@ const JobworkInwardChallan = () => {
                           <tbody>
                             {tableRows.length === 0 ? (
                               <tr>
-                                <td colSpan="12" className="text-center text-muted">
+                                <td colSpan="13" className="text-center text-muted">
                                   No items added yet. Use the form above to add items.
                                 </td>
                               </tr>
@@ -745,6 +784,7 @@ const JobworkInwardChallan = () => {
                                 <tr key={index}>
                                   <td>{index + 1}</td>
                                   <td>{row.ItemCode}</td>
+                                  <td>{row.item_size || "-"}</td>
                                   <td>{row.ParticularNatureOfProcess}</td>
                                   <td>{row.ChallanQty}</td>
                                   <td>{row.GRNQty}</td>
