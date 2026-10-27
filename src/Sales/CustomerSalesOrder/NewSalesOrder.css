@@ -189,6 +189,26 @@
     border-bottom: 1px solid #f1f5f9;
   }
   
+  .NewSalesOrderMaster .table .form-control,
+  .NewSalesOrderMaster .table .form-select,
+  .NewSalesOrderMaster .table input,
+  .NewSalesOrderMaster .table select,
+  .NewSalesOrderMaster .table textarea {
+    font-size: 0.72rem !important;
+    padding: 3px 5px !important;
+    min-height: 26px !important;
+    border-radius: 4px !important;
+  }
+
+  .NewSalesOrderMaster .table textarea {
+    min-height: 48px !important;
+  }
+
+  .NewSalesOrderMaster .table .vndrbtn {
+    padding: 4px 8px !important;
+    font-size: 0.75rem !important;
+  }
+  
   /* Responsive Design */
   @media (max-width: 768px) {
     .tab-content .row {

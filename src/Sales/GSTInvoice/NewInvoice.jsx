@@ -127,6 +127,8 @@ const NewInvoice = () => {
               Unit_Code: itm.Unit_Code || itm.uom || itm.unit || itm.Unit || "pcs",
               plan_date: itm.plan_date || itm.Plan_Date || itm.due_date || itm.Due_Date || null,
               po_qty: itm.po_qty || itm.qty || itm.order_qty || itm.Qty || itm.PO_Qty || 0,
+              item_size: itm.item_size || itm.Item_Size || "",
+              Item_Size: itm.Item_Size || itm.item_size || "",
             };
           })
         );
@@ -435,6 +437,8 @@ const NewInvoice = () => {
         trans_charges: itemFieldsData?.trans_charges || itemFieldsData?.Trans_Charges || itemObj.trans_charges || "",
         qty: poQty,
         po_qty: poQty,
+        item_size: itemFieldsData?.item_size || itemFieldsData?.Item_Size || itemObj.item_size || itemObj.Item_Size || "",
+        Item_Size: itemFieldsData?.Item_Size || itemFieldsData?.item_size || itemObj.Item_Size || itemObj.item_size || "",
         assessable_value: assessableValue.toFixed(2),
       });
 
@@ -455,6 +459,8 @@ const NewInvoice = () => {
         Unit_Code: itemObj.Unit_Code || "pcs",
         qty: poQty,
         po_qty: poQty,
+        item_size: itemObj.item_size || itemObj.Item_Size || "",
+        Item_Size: itemObj.Item_Size || itemObj.item_size || "",
         assessable_value: assessableValue.toFixed(2),
         last_operation: {
           part_code: itemObj.Part_Code || "",
@@ -530,7 +536,7 @@ const NewInvoice = () => {
       "customer", "po_no", "date", "stock", "description",
       "rate", "dis", "po_qty", "bal_qty", "inv_qty",
       "pkg_qty", "type_of_packing", "hsn_code", "invoice",
-      "item_code", "part_code", "part_no", "item"
+      "item_code", "part_code", "part_no", "item", "item_size"
     ];
 
     const cleaned = {};
@@ -604,6 +610,7 @@ const NewInvoice = () => {
         item_code: row.item_code || "",
         part_code: row.last_operation?.part_code || row.Part_Code || row.part_code || row.Item_Code || row.hsn_code || "1",
         part_no: row.last_operation?.part_no || row.Part_No || row.part_no || row.part_no_short || row.item_code || "",
+        item_size: row.item_size || row.Item_Size || "",
       }));
 
       // Calculate total assessable value
@@ -1106,6 +1113,10 @@ const NewInvoice = () => {
                                           defaultValue={row.Name_Description}
                                           className="form-control-sm w-100"
                                         ></textarea>
+                                        <br />{" "}
+                                        <span>
+                                          Item Size : {row.Item_Size || row.item_size || "-"}
+                                        </span>
                                         <br />{" "}
                                         <span>
                                           HSN Code : {row.HSN_SAC_Code}

@@ -49,6 +49,7 @@ const NewSalesOrder = () => {
     due_date_item: "",
     type_item: "",
     remark_item: "",
+    item_size: "",
   });
 
   const [customerTaxType, setCustomerTaxType] = useState("INTERSTATE");
@@ -284,6 +285,7 @@ const NewSalesOrder = () => {
         igst: item.tax_details?.IGST || "",
         utgst: item.tax_details?.UTGST || "",
         item_wt: item.Gross_Weight || "",
+        item_size: item.Item_Size || item.item_size || "",
       });
     }
   };
@@ -377,6 +379,8 @@ const NewSalesOrder = () => {
       rev_no: "0",
       item_code: currentItem.part_code,
       item_description: currentItem.description,
+      item_size: currentItem.item_size || "",
+      Item_Size: currentItem.item_size || "",
 
       rate: rate,
       qty: qty,
@@ -429,6 +433,7 @@ const NewSalesOrder = () => {
       due_date_item: "",
       type_item: "",
       remark_item: "",
+      item_size: "",
     });
   };
 
@@ -458,6 +463,7 @@ const NewSalesOrder = () => {
       due_date_item: item.due_date || "",
       type_item: item.type || "",
       remark_item: item.remark || "",
+      item_size: item.item_size || item.Item_Size || "",
     });
     setOrderItems(orderItems.filter(i => i.id !== item.id));
   };
@@ -509,6 +515,7 @@ const NewSalesOrder = () => {
           item_no: item.item_no,
           item_code: item.item_code,
           item_description: item.item_description,
+          item_size: item.item_size || item.Item_Size || "",
           rate: parseFloat(item.rate) || 0,
           desc: item.desc || null,
           desc_amt: item.desc_amt || "0.00",
@@ -999,7 +1006,7 @@ const NewSalesOrder = () => {
                                     <td>
                                       <input
                                         list="item-search-list"
-                                        className="w-55 form-control"
+                                        className="form-control form-control-sm"
                                         value={currentItem.selectedSearch}
                                         onChange={handleItemSearchChange}
                                         placeholder="Search Item..."
@@ -1012,35 +1019,50 @@ const NewSalesOrder = () => {
                                           />
                                         ))}
                                       </datalist>
-                                      Rev No: {currentItem.part_no ? "0" : ""}
+                                      <small className="text-muted d-block mt-1">Rev No: {currentItem.part_no ? "0" : ""}</small>
                                     </td>
                                     <td>
                                       <input
                                         type="text"
-                                        className="w-55 form-control"
+                                        className="form-control form-control-sm"
                                         value={currentItem.part_code}
                                         readOnly
                                       />
-                                      <br />
-                                      Line No :{" "}
-                                      <input
-                                        type="text"
-                                        className="w-50 mt-2 form-control"
-                                        placeholder=" "
-                                      />{" "}
-                                      <br /> PR No. :{" "}
-                                      <input
-                                        type="text"
-                                        className="w-50 mt-2 form-control"
-                                        placeholder=" "
-                                      />
+                                      <div className="mt-1 d-flex align-items-center gap-1">
+                                        <span style={{ fontSize: "0.7rem", whiteSpace: "nowrap" }}>Line:</span>
+                                        <input
+                                          type="text"
+                                          className="form-control form-control-sm"
+                                          placeholder=""
+                                        />
+                                      </div>
+                                      <div className="mt-1 d-flex align-items-center gap-1">
+                                        <span style={{ fontSize: "0.7rem", whiteSpace: "nowrap" }}>PR:</span>
+                                        <input
+                                          type="text"
+                                          className="form-control form-control-sm"
+                                          placeholder=""
+                                        />
+                                      </div>
                                     </td>
                                     <td>
                                       <textarea
-                                        className="form-control"
+                                        className="form-control form-control-sm"
+                                        rows="2"
                                         value={currentItem.description}
                                         readOnly
+                                        placeholder="Item Desc"
                                       ></textarea>
+                                      <div className="mt-1">
+                                        <label className="mb-0 text-start d-block" style={{ fontSize: "0.7rem", fontWeight: 600 }}>Item Size:</label>
+                                        <input
+                                          type="text"
+                                          className="form-control form-control-sm mt-1"
+                                          value={currentItem.item_size}
+                                          onChange={(e) => setCurrentItem({ ...currentItem, item_size: e.target.value })}
+                                          placeholder="Item Size"
+                                        />
+                                      </div>
                                     </td>
 
                                     <td>
@@ -1075,7 +1097,7 @@ const NewSalesOrder = () => {
                                     <td>
                                       <input
                                         type="number"
-                                        className="form-control"
+                                        className="form-control form-control-sm"
                                         value={currentItem.qty}
                                         onChange={(e) =>
                                           setCurrentItem({
@@ -1085,35 +1107,32 @@ const NewSalesOrder = () => {
                                         }
                                         placeholder="Qty"
                                       />
-                                      <br />{" "}
                                       <input
                                         type="text"
-                                        className="w-50 mt-2 form-control"
-                                        placeholder=" "
+                                        className="form-control form-control-sm mt-1"
+                                        placeholder=""
                                       />
                                     </td>
                                     <td>
-                                      {" "}
                                       <select 
                                         name="uom" 
                                         id="uom"
+                                        className="form-select form-select-sm"
                                         value={currentItem.uom}
                                         onChange={(e) => setCurrentItem({...currentItem, uom: e.target.value})}
                                       >
                                         <option value="NOS">NOS</option>
                                         <option value="KGS">KGS</option>
-                                      </select>{" "}
-                                      <br />{" "}
+                                      </select>
                                       <input
                                         type="text"
-                                        className="w-60 mt-2 form-control"
-                                        placeholder="Item Wt. "
-                                      />{" "}
-                                      <br />{" "}
+                                        className="form-control form-control-sm mt-1"
+                                        placeholder="Item Wt."
+                                      />
                                       <input
                                         type="text"
-                                        className="w-50 mt-2 form-control"
-                                        placeholder="Per Unit "
+                                        className="form-control form-control-sm mt-1"
+                                        placeholder="Per Unit"
                                       />
                                     </td>
                                     <td>
@@ -1162,7 +1181,7 @@ const NewSalesOrder = () => {
                                     </td>
                                     <td>
                                       <button
-                                        className="vndrbtn w-100 mt-2"
+                                        className="vndrbtn w-100"
                                         onClick={addItemToTable}
                                       >
                                         Add
@@ -1180,21 +1199,22 @@ const NewSalesOrder = () => {
                                 <thead>
                                   <tr>
                                     <th style={{ width: '3%', textAlign: 'center' }}>Sr.</th>
-                                    <th style={{ width: '8%' }}>Item No</th>
+                                    <th style={{ width: '7%' }}>Item No</th>
                                     <th style={{ width: '7%' }}>Item Code</th>
-                                    <th style={{ width: '12%' }}>Description</th>
+                                    <th style={{ width: '11%' }}>Description</th>
+                                    <th style={{ width: '6%' }}>Item Size</th>
                                     <th style={{ width: '6%' }}>Rate</th>
-                                    <th style={{ width: '6%' }}>Discount</th>
-                                    <th style={{ width: '8%' }}>PO Qty | UOM</th>
-                                    <th style={{ width: '8%' }}>Rate Type| Item Wt.</th>
-                                    <th style={{ width: '7%' }}>Sub Total</th>
-                                    <th style={{ width: '7%' }}>Pkg. Trans</th>
-                                    <th style={{ width: '9%' }}>Plan | Due Date</th>
+                                    <th style={{ width: '5%' }}>Discount</th>
+                                    <th style={{ width: '7%' }}>PO Qty | UOM</th>
+                                    <th style={{ width: '7%' }}>Rate Type| Item Wt.</th>
+                                    <th style={{ width: '6%' }}>Sub Total</th>
+                                    <th style={{ width: '6%' }}>Pkg. Trans</th>
+                                    <th style={{ width: '8%' }}>Plan | Due Date</th>
                                     <th style={{ width: '5%' }}>Type</th>
-                                    <th style={{ width: '10%' }}>GST</th>
+                                    <th style={{ width: '9%' }}>GST</th>
                                     <th style={{ width: '7%' }}>Remark</th>
-                                    <th style={{ width: '3%', textAlign: 'center' }}>Edit</th>
-                                    <th style={{ width: '3%', textAlign: 'center' }}>Delete</th>
+                                    <th style={{ width: '2.5%', textAlign: 'center' }}>Edit</th>
+                                    <th style={{ width: '2.5%', textAlign: 'center' }}>Delete</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -1214,6 +1234,7 @@ const NewSalesOrder = () => {
                                         <br /> Rev. No :
                                         <br /> HSN/SAC : {item.hsn}
                                       </td>
+                                      <td>{item.Item_Size || item.item_size || "-"}</td>
                                       <td>{item.rate}</td>
                                       <td>{item.discount || '-'}</td>
                                       <td>{item.qty} | {item.uom}</td>
