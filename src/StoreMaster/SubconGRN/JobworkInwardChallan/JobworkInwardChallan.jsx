@@ -312,6 +312,27 @@ const JobworkInwardChallan = () => {
 
   const validate = () => {
     const newErrors = {};
+    if (!formData.InwardDate) {
+      newErrors.InwardDate = "Inward Date is required";
+    }
+    if (!formData.ChallanDate) {
+      newErrors.ChallanDate = "Challan Date is required";
+    }
+    if (!formData.DcDate) {
+      newErrors.DcDate = "D.C. Date is required";
+    }
+    if (!formData.TcDate) {
+      newErrors.TcDate = "Tc Date is required";
+    }
+    if (!formData.VehicleNo) {
+      newErrors.VehicleNo = "Vehicle No is required";
+    }
+    if (!formData.VehicleTime) {
+      newErrors.VehicleTime = "Vehicle in Time is required";
+    }
+    if (!formData.VehicleOutTime) {
+      newErrors.VehicleOutTime = "Vehicle Out Time is required";
+    }
     if (!formData.DeliveryInTime) {
       newErrors.DeliveryInTime = "Please select Yes or No for Delivery In Time.";
     }
@@ -854,15 +875,17 @@ const JobworkInwardChallan = () => {
                                       <tbody>
                                         {[
                                           { label: "Inward F4 No:", name: "InwardF4No", type: "text", readOnly: true },
-                                          { label: "Inward Date:", name: "InwardDate", type: "date" },
+                                          { label: "Inward Date:", name: "InwardDate", type: "date", required: true },
                                           { label: "Inward Time:", name: "InwardTime", type: "text" },
                                           { label: "Challan No:", name: "ChallanNo", type: "text" },
-                                          { label: "Challan Date:", name: "ChallanDate", type: "date" },
+                                          { label: "Challan Date:", name: "ChallanDate", type: "date", required: true },
                                           { label: "Sub Vendor:", name: "SubVendor", type: "text" },
                                           { label: "D. C. No:", name: "DcNo", type: "text" },
-                                        ].map(({ label, name, type, readOnly }) => (
+                                        ].map(({ label, name, type, readOnly, required }) => (
                                           <tr key={name}>
-                                            <th className="col-md-4">{label}</th>
+                                            <th className="col-md-4">
+                                              {label} {required && <span className="text-danger">*</span>}
+                                            </th>
                                             <td>
                                               <input
                                                 type={type}
@@ -873,7 +896,7 @@ const JobworkInwardChallan = () => {
                                                 readOnly={readOnly}
                                                 style={readOnly ? { backgroundColor: "#e9ecef" } : {}}
                                               />
-                                              {errors[name] && <span className="text-danger">{errors[name]}</span>}
+                                              {errors[name] && <span className="text-danger" style={{ fontSize: "0.75rem" }}>{errors[name]}</span>}
                                             </td>
                                           </tr>
                                         ))}
@@ -890,17 +913,19 @@ const JobworkInwardChallan = () => {
                                     <table className="table table-bordered">
                                       <tbody>
                                         {[
-                                          { label: "D.C. Date:", name: "DcDate", type: "date" },
+                                          { label: "D.C. Date:", name: "DcDate", type: "date", required: true },
                                           { label: "Way Bill Qty:", name: "EWayBillQty", type: "text" },
                                           { label: "Way Bill No:", name: "EWayBillNo", type: "text" },
-                                          { label: "Vehicle No:", name: "VehicleNo", type: "text" },
+                                          { label: "Vehicle No:", name: "VehicleNo", type: "text", required: true },
                                           { label: "Lr No:", name: "LrNo", type: "text" },
                                           { label: "Transporter:", name: "Transporter", type: "text" },
                                           { label: "Prepared By:", name: "PreparedBy", type: "text" },
                                           { label: "Checked By:", name: "CheckedBy", type: "text" },
-                                        ].map(({ label, name, type }) => (
+                                        ].map(({ label, name, type, required }) => (
                                           <tr key={name}>
-                                            <th className="col-md-4">{label}</th>
+                                            <th className="col-md-4">
+                                              {label} {required && <span className="text-danger">*</span>}
+                                            </th>
                                             <td>
                                               <input
                                                 type={type}
@@ -909,7 +934,7 @@ const JobworkInwardChallan = () => {
                                                 value={formData[name]}
                                                 onChange={handleInputChange}
                                               />
-                                              {errors[name] && <span className="text-danger">{errors[name]}</span>}
+                                              {errors[name] && <span className="text-danger" style={{ fontSize: "0.75rem" }}>{errors[name]}</span>}
                                             </td>
                                           </tr>
                                         ))}
@@ -926,9 +951,12 @@ const JobworkInwardChallan = () => {
                                     <table className="table table-bordered">
                                       <tbody>
                                         <tr>
-                                          <th className="col-md-4">Vehicle in Time:</th>
+                                          <th className="col-md-4">
+                                            Vehicle in Time: <span className="text-danger">*</span>
+                                          </th>
                                           <td>
-                                            <input type="text" className="form-control" name="VehicleTime" value={formData.VehicleTime} onChange={handleInputChange} />
+                                            <input type="time" className="form-control" name="VehicleTime" value={formData.VehicleTime} onChange={handleInputChange} />
+                                            {errors.VehicleTime && <span className="text-danger" style={{ fontSize: "0.75rem" }}>{errors.VehicleTime}</span>}
                                           </td>
                                         </tr>
                                         <tr>
@@ -938,9 +966,12 @@ const JobworkInwardChallan = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <th className="col-md-4">Tc Date:</th>
+                                          <th className="col-md-4">
+                                            Tc Date: <span className="text-danger">*</span>
+                                          </th>
                                           <td>
                                             <input type="date" className="form-control" name="TcDate" value={formData.TcDate} onChange={handleInputChange} />
+                                            {errors.TcDate && <span className="text-danger" style={{ fontSize: "0.75rem" }}>{errors.TcDate}</span>}
                                           </td>
                                         </tr>
                                         <tr>
@@ -1002,9 +1033,12 @@ const JobworkInwardChallan = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <th className="col-md-4">Vehicle Out Time:</th>
+                                          <th className="col-md-4">
+                                            Vehicle Out Time: <span className="text-danger">*</span>
+                                          </th>
                                           <td>
-                                            <input type="text" className="form-control" name="VehicleOutTime" value={formData.VehicleOutTime} onChange={handleInputChange} />
+                                            <input type="time" className="form-control" name="VehicleOutTime" value={formData.VehicleOutTime} onChange={handleInputChange} />
+                                            {errors.VehicleOutTime && <span className="text-danger" style={{ fontSize: "0.75rem" }}>{errors.VehicleOutTime}</span>}
                                           </td>
                                         </tr>
                                         <tr>

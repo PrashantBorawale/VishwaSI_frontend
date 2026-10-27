@@ -18,6 +18,7 @@ const BalanceSheet = () => {
     fromDate: "",
     toDate: "",
     customer: "",
+    heatNo: "",
   });
 
   // Data for the main table (flattened items with customer details)
@@ -29,11 +30,22 @@ const BalanceSheet = () => {
   const [modalData, setModalData] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
 
+  // Filter rows by heat number if entered
+  const displayedRows = rows.filter((r) => {
+    if (!filters.heatNo || filters.heatNo.trim() === "") return true;
+    const query = filters.heatNo.trim().toLowerCase();
+    if (!r.variants || !Array.isArray(r.variants)) return false;
+    return r.variants.some((v) => {
+      const heat = String(v.HeatNo || v.heat_no || "").toLowerCase();
+      return heat.includes(query);
+    });
+  });
+
   // Pagination logic
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const totalPages = Math.ceil(rows.length / itemsPerPage) || 1;
-  const currentRows = rows.slice(
+  const totalPages = Math.ceil(displayedRows.length / itemsPerPage) || 1;
+  const currentRows = displayedRows.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -126,15 +138,25 @@ const BalanceSheet = () => {
   // Build query params and search/filter
   const handleSearch = (e) => {
     if (e && e.preventDefault) e.preventDefault();
+    setCurrentPage(1);
     const params = {};
     if (filters.customer && filters.customer.trim() !== "") {
       params.customer = filters.customer.trim();
     }
     if (filters.fromDate && filters.fromDate.trim() !== "") {
-      params.from_date = filters.fromDate.trim();
+      const from = filters.fromDate.trim();
+      params.from_date = from;
+      params.fromDate = from;
     }
     if (filters.toDate && filters.toDate.trim() !== "") {
-      params.to_date = filters.toDate.trim();
+      const to = filters.toDate.trim();
+      params.to_date = to;
+      params.toDate = to;
+    }
+    if (filters.heatNo && filters.heatNo.trim() !== "") {
+      const heat = filters.heatNo.trim();
+      params.heat_no = heat;
+      params.heatNo = heat;
     }
     fetchBalanceSheetData(params);
   };
@@ -166,12 +188,12 @@ const BalanceSheet = () => {
   };
 
   const handleExportExcel = () => {
-    if (rows.length === 0) {
+    if (displayedRows.length === 0) {
       alert("No data to export");
       return;
     }
 
-    const exportData = rows.map((r, index) => ({
+    const exportData = displayedRows.map((r, index) => ({
       "Sr": index + 1,
       "Cust. Name": r.customer || "-",
       "Item Number": r.item_number ?? r.item_no ?? r.part_no ?? "-",
@@ -242,7 +264,7 @@ const BalanceSheet = () => {
                           onSubmit={handleSearch}
                         >
                           {/* Plant */}
-                          <div className="col-md-2 col-sm-6">
+                          <div className="col-xl-2 col-lg-2 col-md-4 col-sm-6">
                             <label className="form-label">Plant</label>
                             <select
                               className="form-select"
@@ -255,7 +277,7 @@ const BalanceSheet = () => {
                           </div>
 
                           {/* From Date Calendar */}
-                          <div className="col-md-2 col-sm-6">
+                          <div className="col-xl-2 col-lg-2 col-md-4 col-sm-6">
                             <label className="form-label">From Date</label>
                             <input
                               type="date"
@@ -267,7 +289,7 @@ const BalanceSheet = () => {
                           </div>
 
                           {/* To Date Calendar */}
-                          <div className="col-md-2 col-sm-6">
+                          <div className="col-xl-2 col-lg-2 col-md-4 col-sm-6">
                             <label className="form-label">To Date</label>
                             <input
                               type="date"
@@ -279,7 +301,7 @@ const BalanceSheet = () => {
                           </div>
 
                           {/* Customer Name Search */}
-                          <div className="col-md-4 col-sm-6">
+                          <div className="col-xl-2 col-lg-2 col-md-4 col-sm-6">
                             <label className="form-label">Customer Name</label>
                             <input
                               type="text"
@@ -288,12 +310,26 @@ const BalanceSheet = () => {
                               value={filters.customer}
                               onChange={handleChange}
                               autoComplete="off"
-                              placeholder="Enter Customer Name (e.g. laxmi)..."
+                              placeholder="Customer Name..."
+                            />
+                          </div>
+
+                          {/* Heat No Search */}
+                          <div className="col-xl-2 col-lg-2 col-md-4 col-sm-6">
+                            <label className="form-label">Heat No</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="heatNo"
+                              value={filters.heatNo}
+                              onChange={handleChange}
+                              autoComplete="off"
+                              placeholder="Heat No..."
                             />
                           </div>
 
                           {/* Search / View Button */}
-                          <div className="col-md-2 col-sm-6">
+                          <div className="col-xl-2 col-lg-2 col-md-4 col-sm-6">
                             <button
                               type="submit"
                               className="vndrbtn w-100"

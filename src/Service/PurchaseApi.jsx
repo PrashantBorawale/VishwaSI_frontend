@@ -396,7 +396,11 @@ export const updatePurchaseOrder = async (id, data) => {
       throw new Error(`API Error: ${response.status} - ${errText}`);
     }
 
-    return await response.json();
+    const contentType = response.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      return await response.json();
+    }
+    return { success: true };
   } catch (error) {
     console.error("Error updating purchase order:", error);
     throw error;
@@ -411,18 +415,35 @@ export const fetchPurchaseOrderById = async (id) => {
       throw new Error("Authentication token not found. Please login again.");
     }
 
-    const response = await fetch(`${BASE_URL}RegisterPO_All_Series/${id}/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    // Try detail endpoint first
+    try {
+      const response = await fetch(`${BASE_URL}RegisterPO_All_Series/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const contentType = response.headers.get("content-type") || "";
+      if (response.ok && contentType.includes("application/json")) {
+        const order = await response.json();
+        return order;
+      }
+    } catch (e) {
+      console.warn("Direct PO fetch failed, trying list fallback:", e);
     }
 
-    const order = await response.json();
-    return order;
+    // Fallback: If detail endpoint returns 404 / HTML or is not routed individually,
+    // look up the order by ID from the full list endpoint
+    const allOrders = await fetchPurchaseOrders();
+    if (Array.isArray(allOrders)) {
+      const found = allOrders.find((o) => String(o.id) === String(id));
+      if (found) {
+        return found;
+      }
+    }
+
+    throw new Error(`Purchase order with ID ${id} not found.`);
   } catch (error) {
     console.error("Error fetching purchase order:", error);
     throw error;
