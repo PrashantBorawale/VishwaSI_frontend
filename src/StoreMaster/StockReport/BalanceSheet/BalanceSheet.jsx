@@ -178,6 +178,8 @@ const BalanceSheet = () => {
       "Item Code": r.item_code ?? r.Part_Code ?? r.part_code ?? "-",
       "Item Desc": r.item_desc ?? r.description ?? r.Name_Description ?? r.desc ?? "-",
       "Item Size": r.item_size ?? r.size ?? "-",
+      "Inv Desc": r.inv_description ?? r.inv_desc ?? "-",
+      "Inv Item Size": r.inv_item_size ?? r.inv_size ?? "-",
       "Stock": r.stock ?? r.total_stock ?? 0,
       "Todays Stock": r.today_stock ?? r.today_total_stock ?? 0,
       "Heat No": getHeatCount(r.variants) > 0 ? `${getHeatCount(r.variants)} Heat No(s)` : "N/A",
@@ -319,26 +321,28 @@ const BalanceSheet = () => {
                           <thead>
                             <tr>
                               <th style={{ width: "3%" }}>Sr</th>
-                              <th style={{ width: "12%" }}>Cust. Name</th>
-                              <th style={{ width: "7%" }}>Item Number</th>
-                              <th style={{ width: "7%" }}>Item Code</th>
-                              <th style={{ width: "10%" }}>Item Desc</th>
+                              <th style={{ width: "10%" }}>Cust. Name</th>
+                              <th style={{ width: "6%" }}>Item Number</th>
+                              <th style={{ width: "6%" }}>Item Code</th>
+                              <th style={{ width: "8%" }}>Item Desc</th>
                               <th style={{ width: "5%" }}>Item Size</th>
-                              <th style={{ width: "6%" }}>Stock</th>
+                              <th style={{ width: "8%" }}>Inv Desc</th>
+                              <th style={{ width: "5%" }}>Inv Item Size</th>
+                              <th style={{ width: "5%" }}>Stock</th>
                               <th style={{ width: "6%" }}>Todays Stock</th>
-                              <th style={{ width: "8%" }}>Heat No</th>
+                              <th style={{ width: "7%" }}>Heat No</th>
                               <th style={{ width: "5%" }}>Bar</th>
                               <th style={{ width: "5%" }}>Wire Rod</th>
-                              <th style={{ width: "6%" }}>Shop Floor</th>
-                              <th style={{ width: "6%" }}>Rework</th>
-                              <th style={{ width: "6%" }}>Reject</th>
-                              <th style={{ width: "8%" }}>Invoice Qty</th>
+                              <th style={{ width: "5%" }}>Shop Floor</th>
+                              <th style={{ width: "5%" }}>Rework</th>
+                              <th style={{ width: "5%" }}>Reject</th>
+                              <th style={{ width: "6%" }}>Invoice Qty</th>
                             </tr>
                           </thead>
                           <tbody>
                             {loading ? (
                               <tr>
-                                <td colSpan="15" className="text-center py-4 text-muted">
+                                <td colSpan="17" className="text-center py-4 text-muted">
                                   Loading data...
                                 </td>
                               </tr>
@@ -353,6 +357,8 @@ const BalanceSheet = () => {
                                     <td>{r.item_code ?? r.Part_Code ?? r.part_code ?? "-"}</td>
                                     <td>{r.item_desc ?? r.description ?? r.Name_Description ?? r.desc ?? "-"}</td>
                                     <td>{r.item_size ?? r.size ?? "-"}</td>
+                                    <td>{r.inv_description ?? r.inv_desc ?? "-"}</td>
+                                    <td>{r.inv_item_size ?? r.inv_size ?? "-"}</td>
                                     <td style={{ fontWeight: 600 }}>{r.stock ?? r.total_stock ?? 0}</td>
                                     <td style={{ fontWeight: 600, color: "#2563eb" }}>{r.today_stock ?? r.today_total_stock ?? 0}</td>
                                     <td>
@@ -382,7 +388,7 @@ const BalanceSheet = () => {
                               })
                             ) : (
                               <tr>
-                                <td colSpan="14" className="text-center py-4 text-muted">
+                                <td colSpan="17" className="text-center py-4 text-muted">
                                   No Data Found
                                 </td>
                               </tr>

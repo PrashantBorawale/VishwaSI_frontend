@@ -112,11 +112,11 @@
   word-wrap: break-word;
   word-break: break-word;
   overflow-wrap: break-word;
-  font-size: 0.68rem !important; 
-  padding: 5px 3px !important; 
+  font-size: 0.65rem !important; 
+  padding: 4px 2px !important; 
   text-align: center;
   vertical-align: middle;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
 .BalanceSheet .table th {
