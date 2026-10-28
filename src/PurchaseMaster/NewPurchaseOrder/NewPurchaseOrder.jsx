@@ -17,12 +17,13 @@ import {
   fetchPurchaseOrderById,
   updatePurchaseOrder,
 } from "../../Service/PurchaseApi.jsx";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const NewPurchaseOrder = () => {
   const { id } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const isEditMode = !!id;
 
@@ -93,31 +94,44 @@ const NewPurchaseOrder = () => {
     CodeNo: "",
   });
 
+  const populateOrderData = useCallback((orderData) => {
+    if (!orderData) return;
+    setFormData((prev) => ({
+      ...prev,
+      ...orderData,
+      Item_Detail_Enter: orderData.Item_Detail_Enter || orderData.items || [],
+      Gst_Details: orderData.Gst_Details || [],
+      Item_Details_Other: orderData.Item_Details_Other || [],
+      Schedule_Line: orderData.Schedule_Line || [],
+      Ship_To_Add: orderData.Ship_To_Add || [],
+    }));
+    setSelectedSeries(orderData.Series || orderData.series || "");
+    setIndentNo(orderData.PoNo || orderData.po_no || "");
+    setSupplierName(orderData.Supplier || orderData.supplier || "");
+    setSupplierCode(orderData.CodeNo || orderData.code_no || "");
+  }, []);
+
   useEffect(() => {
     const fetchOrderData = async () => {
       if (isEditMode) {
+        // If state already has the order (e.g. clicked from list), populate immediately
+        if (location.state?.order) {
+          populateOrderData(location.state.order);
+        }
+
         setIsLoadingOrder(true);
         try {
           const orderData = await fetchPurchaseOrderById(id);
           console.log("Fetched order data:", orderData);
-
-          setFormData({
-            ...orderData,
-            Item_Detail_Enter: orderData.Item_Detail_Enter || [],
-            Gst_Details: orderData.Gst_Details || [],
-            Item_Details_Other: orderData.Item_Details_Other || [],
-            Schedule_Line: orderData.Schedule_Line || [],
-            Ship_To_Add: orderData.Ship_To_Add || [],
-          });
-          setSelectedSeries(orderData.Series || "");
-          setIndentNo(orderData.PoNo || "");
-          setSupplierName(orderData.Supplier || "");
-          setSupplierCode(orderData.CodeNo || "");
-
-          toast.success("Purchase order loaded successfully");
+          if (orderData) {
+            populateOrderData(orderData);
+            toast.success("Purchase order loaded successfully");
+          }
         } catch (error) {
           console.error("Error fetching purchase order:", error);
-          toast.error("Failed to load purchase order");
+          if (!location.state?.order) {
+            toast.error("Failed to load purchase order");
+          }
         } finally {
           setIsLoadingOrder(false);
         }
@@ -125,7 +139,7 @@ const NewPurchaseOrder = () => {
     };
 
     fetchOrderData();
-  }, [id, isEditMode]);
+  }, [id, isEditMode, location.state, populateOrderData]);
 
   // Fetch Supplier Details and Extract State dynamically
   useEffect(() => {

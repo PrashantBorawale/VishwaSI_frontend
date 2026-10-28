@@ -272,6 +272,7 @@ const PoList = () => {
                                 <td>
                                   <Link
                                     to={`/new-purchase-order/${order.id}`}
+                                    state={{ order }}
                                     className="btn"
                                   >
                                     <FaEdit />

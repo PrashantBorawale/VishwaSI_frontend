@@ -247,7 +247,7 @@ const PurchseOderList = () => {
                                   </td>
                                   <td style={{ fontSize: '0.85rem', padding: '8px', textAlign: 'center', whiteSpace: 'nowrap' }}>0.00</td>
                                   <td style={{ fontSize: '0.85rem', padding: '8px', textAlign: 'center', whiteSpace: 'nowrap' }}>
-                                    <Link to={`/new-purchase-order/${order.id}`} className="btn btn-sm btn-outline-primary" style={{ fontSize: '0.75rem', padding: '2px 8px' }}>
+                                    <Link to={`/new-purchase-order/${order.id}`} state={{ order }} className="btn btn-sm btn-outline-primary" style={{ fontSize: '0.75rem', padding: '2px 8px' }}>
                                       <i className="fas fa-edit"></i>
                                     </Link>
                                   </td>
