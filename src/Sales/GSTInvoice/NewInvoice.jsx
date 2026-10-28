@@ -581,6 +581,54 @@ const NewInvoice = () => {
       return;
     }
 
+    if (!formData.invoice_Date) {
+      toast.error("Invoice Date is mandatory.");
+      document.getElementById('taxes-tab')?.click();
+      return;
+    }
+
+    if (!formData.invoice_time) {
+      toast.error("Invoice Time is mandatory.");
+      document.getElementById('taxes-tab')?.click();
+      return;
+    }
+
+    if (!formData.payment_Date) {
+      toast.error("Payment Date is mandatory.");
+      document.getElementById('taxes-tab')?.click();
+      return;
+    }
+
+    if (!formData.date_of_removal) {
+      toast.error("Removal Date is mandatory.");
+      document.getElementById('taxes-tab')?.click();
+      return;
+    }
+
+    if (!formData.time) {
+      toast.error("Time is mandatory.");
+      document.getElementById('taxes-tab')?.click();
+      return;
+    }
+
+    if (!formData.vehical_no) {
+      toast.error("Vehicle No is mandatory.");
+      document.getElementById('taxes-tab')?.click();
+      return;
+    }
+
+    if (!formData.d_c_Date) {
+      toast.error("D.C. Date is mandatory.");
+      document.getElementById('taxes-tab')?.click();
+      return;
+    }
+
+    if (!formData.trans_distance_km) {
+      toast.error("Transport K.M. is mandatory.");
+      document.getElementById('taxes-tab')?.click();
+      return;
+    }
+
     if (tableData.length === 0) {
       toast.error("Please add at least one item to the invoice");
       return;
@@ -1276,7 +1324,7 @@ const NewInvoice = () => {
                               </div>
                               <div className="row mb-2">
                                 <div className="col-4">
-                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Payment Date:</label>
+                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Payment Date: <span className="text-danger">*</span></label>
                                 </div>
                                 <div className="col-8">
                                   {/* FIX 1: name updated to payment_Date */}
@@ -1286,6 +1334,7 @@ const NewInvoice = () => {
                                     value={formData.payment_Date}
                                     onChange={handleChange}
                                     className="form-control"
+                                    required
                                   />
                                 </div>
                               </div>
@@ -1383,7 +1432,7 @@ const NewInvoice = () => {
                             <div className="col-md-4">
                               <div className="row mb-2">
                                 <div className="col-4">
-                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Invoice Date:</label>
+                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Invoice Date: <span className="text-danger">*</span></label>
                                 </div>
                                 <div className="col-8">
                                   {/* FIX 1: name updated to invoice_Date */}
@@ -1393,12 +1442,13 @@ const NewInvoice = () => {
                                     value={formData.invoice_Date}
                                     className="form-control bg-light"
                                     readOnly
+                                    required
                                   />
                                 </div>
                               </div>
                               <div className="row mb-2">
                                 <div className="col-4">
-                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Removal Date:</label>
+                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Removal Date: <span className="text-danger">*</span></label>
                                 </div>
                                 <div className="col-8">
                                   <input
@@ -1407,12 +1457,13 @@ const NewInvoice = () => {
                                     value={formData.date_of_removal}
                                     onChange={handleChange}
                                     className="form-control"
+                                    required
                                   />
                                 </div>
                               </div>
                               <div className="row mb-2">
                                 <div className="col-4">
-                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Vehicle No:</label>
+                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Vehicle No: <span className="text-danger">*</span></label>
                                 </div>
                                 <div className="col-8 d-flex gap-1">
                                   <input
@@ -1420,6 +1471,7 @@ const NewInvoice = () => {
                                     value={formData.vehical_no}
                                     onChange={handleChange}
                                     className="form-control"
+                                    required
                                   />
                                   <button
                                     type="button"
@@ -1479,7 +1531,7 @@ const NewInvoice = () => {
                               </div>
                               <div className="row mb-2">
                                 <div className="col-4">
-                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>D.C. Date:</label>
+                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>D.C. Date: <span className="text-danger">*</span></label>
                                 </div>
                                 <div className="col-8">
                                   {/* FIX 1: name updated to d_c_Date */}
@@ -1489,6 +1541,7 @@ const NewInvoice = () => {
                                     value={formData.d_c_Date}
                                     onChange={handleChange}
                                     className="form-control"
+                                    required
                                   />
                                 </div>
                               </div>
@@ -1498,7 +1551,7 @@ const NewInvoice = () => {
                             <div className="col-md-4">
                               <div className="row mb-2">
                                 <div className="col-4">
-                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Invoice Time:</label>
+                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Invoice Time: <span className="text-danger">*</span></label>
                                 </div>
                                 <div className="col-8">
                                   <input
@@ -1507,12 +1560,13 @@ const NewInvoice = () => {
                                     value={formData.invoice_time}
                                     onChange={handleChange}
                                     className="form-control"
+                                    required
                                   />
                                 </div>
                               </div>
                               <div className="row mb-2">
                                 <div className="col-4">
-                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Time:</label>
+                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Time: <span className="text-danger">*</span></label>
                                 </div>
                                 <div className="col-8">
                                   <input
@@ -1521,6 +1575,7 @@ const NewInvoice = () => {
                                     value={formData.time}
                                     onChange={handleChange}
                                     className="form-control"
+                                    required
                                   />
                                 </div>
                               </div>
@@ -1610,7 +1665,7 @@ const NewInvoice = () => {
                               </div>
                               <div className="row mb-2">
                                 <div className="col-4">
-                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Transport K.M.:</label>
+                                  <label className="fw-bold mb-0 text-nowrap" style={{ fontSize: "12px" }}>Transport K.M.: <span className="text-danger">*</span></label>
                                 </div>
                                 <div className="col-8">
                                   <input
@@ -1618,6 +1673,7 @@ const NewInvoice = () => {
                                     value={formData.trans_distance_km}
                                     onChange={handleChange}
                                     className="form-control"
+                                    required
                                   />
                                 </div>
                               </div>

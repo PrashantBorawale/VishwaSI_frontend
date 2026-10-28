@@ -469,10 +469,29 @@ const NewSalesOrder = () => {
   };
 
 
-  // UPDATE handleSaveOrder function - REPLACE THE ENTIRE FUNCTION
-
   const handleSaveOrder = async () => {
     try {
+      if (!formData.so_date) {
+        toast.error("So Date is mandatory.");
+        document.getElementById('taxes-tab')?.click();
+        return;
+      }
+      if (!formData.po_rec_date) {
+        toast.error("Po Rec Date is mandatory.");
+        document.getElementById('taxes-tab')?.click();
+        return;
+      }
+      if (!formData.delivery_date) {
+        toast.error("Delivery Date is mandatory.");
+        document.getElementById('taxes-tab')?.click();
+        return;
+      }
+      if (!formData.plan_date) {
+        toast.error("Plan Date is mandatory.");
+        document.getElementById('taxes-tab')?.click();
+        return;
+      }
+
       // Calculate Top Level Totals
       const totalSubtotal = orderItems.reduce((acc, item) => acc + parseFloat(item.subtotal || 0), 0);
       const totalCgstAmt = orderItems.reduce((acc, item) => acc + parseFloat(item.cgst_amt || 0), 0);
@@ -1372,8 +1391,8 @@ const NewSalesOrder = () => {
                           <div className="NewSalesOrder-main">
                             <div className="row text-start">
                               <div className="col-md-4">
-                                <label>So Date:</label>
-                                <input type="date" className="form-control" name="so_date" value={formData.so_date} onChange={handleChange} />
+                                <label>So Date: <span className="text-danger">*</span></label>
+                                <input type="date" className="form-control" name="so_date" value={formData.so_date} onChange={handleChange} required />
                               </div>
                               <div className="col-md-4">
                                 <label>SO No:</label>
@@ -1401,16 +1420,16 @@ const NewSalesOrder = () => {
 
                             <div className="row text-start mt-2">
                               <div className="col-md-4">
-                                <label>Po Rec Date:</label>
-                                <input type="date" className="form-control" name="po_rec_date" value={formData.po_rec_date} onChange={handleChange} />
+                                <label>Po Rec Date: <span className="text-danger">*</span></label>
+                                <input type="date" className="form-control" name="po_rec_date" value={formData.po_rec_date} onChange={handleChange} required />
                               </div>
                               <div className="col-md-4">
-                                <label>Delivery Date:</label>
-                                <input type="date" className="form-control" name="delivery_date" value={formData.delivery_date} onChange={handleChange} />
+                                <label>Delivery Date: <span className="text-danger">*</span></label>
+                                <input type="date" className="form-control" name="delivery_date" value={formData.delivery_date} onChange={handleChange} required />
                               </div>
                               <div className="col-md-4">
-                                <label>Plan Date:</label>
-                                <input type="date" className="form-control" name="plan_date" value={formData.plan_date} onChange={handleChange} />
+                                <label>Plan Date: <span className="text-danger">*</span></label>
+                                <input type="date" className="form-control" name="plan_date" value={formData.plan_date} onChange={handleChange} required />
                               </div>
                             </div>
 
