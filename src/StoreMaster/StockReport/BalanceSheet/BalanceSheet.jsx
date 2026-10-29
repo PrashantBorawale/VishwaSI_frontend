@@ -245,7 +245,7 @@ const BalanceSheet = () => {
                           cursor: "pointer",
                         }}
                       >
-                        Export To Excel
+                        Export Excel
                       </button>
                     </div>
                   </div>
