@@ -171,6 +171,18 @@ export const updateProduction = async (id, data) => {
   }
 };
 
+export const deleteProductionEntry = async (id) => {
+  try {
+    const token = localStorage.getItem("accessToken") || localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response = await axios.delete(`${BASE_URL}api/production-entries/${id}/`, { headers });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting production entry:", error);
+    throw error;
+  }
+};
+
 export const fetchHelpers = async () => {
   try {
     const response = await fetch(`${BASE_URL}Production_Helper/`);

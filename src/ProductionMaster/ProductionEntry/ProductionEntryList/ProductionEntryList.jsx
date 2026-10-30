@@ -4,9 +4,11 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import NavBar from "../../../NavBar/NavBar.js";
 import SideNav from "../../../SideNav/SideNav.js";
 import "./ProductionEntryList.css";
-import { fetchProductionEntries } from "../../../Service/Production.jsx";
+import { fetchProductionEntries, deleteProductionEntry } from "../../../Service/Production.jsx";
 import { Link } from "react-router-dom";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductionEntryList = () => {
   const [sideNavOpen, setSideNavOpen] = useState(false);
@@ -81,8 +83,24 @@ const ProductionEntryList = () => {
     }
   };
 
+  const handleDelete = async (id, prodNo) => {
+    if (!window.confirm(`Are you sure you want to delete Production Entry ${prodNo || `#${id}`}?`)) {
+      return;
+    }
+
+    try {
+      await deleteProductionEntry(id);
+      setProductionEntries((prev) => prev.filter((item) => item.id !== id));
+      toast.success("Production Entry deleted successfully!");
+    } catch (error) {
+      console.error("Delete failed:", error);
+      toast.error(error.response?.data?.message || error.message || "Failed to delete Production Entry");
+    }
+  };
+
   return (
     <div className="ProductionEntryMasterList" style={{ maxWidth: "100vw", overflowX: "hidden" }}>
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-12">
@@ -178,6 +196,7 @@ const ProductionEntryList = () => {
                             <th>Rework Qty</th>
                             <th>Edit</th>
                             <th>View</th>
+                            <th>Delete</th>
                           </tr>
                         </thead>
 
@@ -215,11 +234,22 @@ const ProductionEntryList = () => {
                                     View
                                   </button>
                                 </td>
+
+                                <td>
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm btn-danger"
+                                    onClick={() => handleDelete(entry.id, entry.Prod_no)}
+                                    title="Delete"
+                                  >
+                                    <FaTrash />
+                                  </button>
+                                </td>
                               </tr>
                             ))
                           ) : (
                             <tr>
-                              <td colSpan="21" className="text-center">
+                              <td colSpan="15" className="text-center">
                                 No production entries found.
                               </td>
                             </tr>
