@@ -2959,17 +2959,34 @@ export const searchItems = async (query) => {
   }
 }
 
+const getBomAuthHeaders = () => {
+  const token = localStorage.getItem("accessToken") || localStorage.getItem("token") || localStorage.getItem("authToken");
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  };
+  const csrfToken = getCookie("csrftoken");
+  return {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(csrfToken ? { "X-CSRFToken": csrfToken } : {}),
+  };
+};
+
 export const saveBomItem = async (itemId, formData, editingId = null) => {
   try {
     console.log("API Call - Item ID:", itemId, "Form Data:", formData) // Debug log
+    const headers = getBomAuthHeaders();
 
     if (editingId) {
       // Update existing record
-      const response = await axios.put(`${BASE_URL}api/items/${itemId}/boms/${editingId}/`, formData)
+      const response = await axios.put(`${BASE_URL}api/items/${itemId}/boms/${editingId}/`, formData, { headers })
       return response.data
     } else {
       // Create new record
-      const response = await axios.post(`${BASE_URL}api/items/${itemId}/boms/`, formData)
+      const response = await axios.post(`${BASE_URL}api/items/${itemId}/boms/`, formData, { headers })
       return response.data
     }
   } catch (error) {
@@ -2984,7 +3001,8 @@ export const saveBomItem = async (itemId, formData, editingId = null) => {
 
 export const deleteBomItem = async (itemId, bomId) => {
   try {
-    const response = await axios.delete(`${BASE_URL}api/items/${itemId}/boms/${bomId}/delete/`)
+    const headers = getBomAuthHeaders();
+    const response = await axios.delete(`${BASE_URL}api/items/${itemId}/boms/${bomId}/delete/`, { headers })
     return response.data
   } catch (error) {
     console.error("Error deleting BOM data:", error)
@@ -3094,7 +3112,8 @@ export const fetchCombinedPartNo = async (part_no, operation_name) => {
 // Updated API functions for BOM Item Part Master
 export const getBomItemsForSelectedItem = async (itemId) => {
   try {
-    const response = await axios.get(`${BASE_URL}BOM_ItemPartMaster/item/${itemId}/bom/`)
+    const headers = getBomAuthHeaders();
+    const response = await axios.get(`${BASE_URL}BOM_ItemPartMaster/item/${itemId}/bom/`, { headers })
     console.log("BOM Items for selected item:", response.data)
     return response.data || []
   } catch (error) {
@@ -3105,7 +3124,8 @@ export const getBomItemsForSelectedItem = async (itemId) => {
 
 export const saveBomItemForSelectedItem = async (itemId, data) => {
   try {
-    const response = await axios.post(`${BASE_URL}BOM_ItemPartMaster/item/${itemId}/bom/`, data)
+    const headers = getBomAuthHeaders();
+    const response = await axios.post(`${BASE_URL}BOM_ItemPartMaster/item/${itemId}/bom/`, data, { headers })
     console.log("Saved BOM item:", response.data)
     return response.data
   } catch (error) {
@@ -3117,7 +3137,8 @@ export const saveBomItemForSelectedItem = async (itemId, data) => {
 // Update BOM
 export const updateBomItemForSelectedItem = async (itemId, bomId, data) => {
   try {
-    const response = await axios.put(`${BASE_URL}api/item/${itemId}/bom/${bomId}/`, data)
+    const headers = getBomAuthHeaders();
+    const response = await axios.put(`${BASE_URL}api/item/${itemId}/bom/${bomId}/`, data, { headers })
     console.log("Updated BOM item:", response.data)
     return response.data
   } catch (error) {
@@ -3128,7 +3149,8 @@ export const updateBomItemForSelectedItem = async (itemId, bomId, data) => {
 
 export const deleteBomItemForSelectedItem = async (itemId, bomId) => {
   try {
-    const response = await axios.delete(`${BASE_URL}api/item/${itemId}/bom/${bomId}/`)
+    const headers = getBomAuthHeaders();
+    const response = await axios.delete(`${BASE_URL}api/item/${itemId}/bom/${bomId}/`, { headers })
     console.log("Deleted BOM item")
     return response.data
   } catch (error) {
