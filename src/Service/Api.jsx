@@ -3002,11 +3002,25 @@ export const saveBomItem = async (itemId, formData, editingId = null) => {
 export const deleteBomItem = async (itemId, bomId) => {
   try {
     const headers = getBomAuthHeaders();
-    const response = await axios.delete(`${BASE_URL}api/items/${itemId}/boms/${bomId}/delete/`, { headers })
-    return response.data
+    try {
+      const response = await axios.delete(`${BASE_URL}api/items/${itemId}/boms/${bomId}/delete/`, { headers });
+      return response.data;
+    } catch (primaryError) {
+      if (primaryError.response && (primaryError.response.status === 404 || primaryError.response.status === 405)) {
+        // Fallback endpoint formats supported by different Django router configurations
+        try {
+          const res2 = await axios.delete(`${BASE_URL}api/items/${itemId}/boms/${bomId}/`, { headers });
+          return res2.data;
+        } catch (e2) {
+          const res3 = await axios.delete(`${BASE_URL}bom/delete/${bomId}/`, { headers });
+          return res3.data;
+        }
+      }
+      throw primaryError;
+    }
   } catch (error) {
-    console.error("Error deleting BOM data:", error)
-    throw error
+    console.error("Error deleting BOM data:", error);
+    throw error;
   }
 }
 
