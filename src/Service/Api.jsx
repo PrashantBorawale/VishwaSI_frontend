@@ -2,6 +2,27 @@
 
 import axios from "axios";
 
+// Automatically attach Bearer auth token and CSRF token to ALL axios requests across the entire application
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken") || localStorage.getItem("token") || localStorage.getItem("authToken");
+  if (token && !config.headers["Authorization"]) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  };
+  const csrfToken = getCookie("csrftoken");
+  if (csrfToken && !config.headers["X-CSRFToken"]) {
+    config.headers["X-CSRFToken"] = csrfToken;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
 
 // Define base URLs
 const BASE_URL = "https://sellerp-backend.onrender.com/All_Masters/";

@@ -39,12 +39,31 @@ const BomRouting = () => {
     setExpandedRows(newExpandedRows);
   };
 
+  // Helper to get auth & CSRF headers
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("accessToken") || localStorage.getItem("token") || localStorage.getItem("authToken");
+    const getCookie = (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    };
+    const csrfToken = getCookie("csrftoken");
+    return {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(csrfToken ? { 'X-CSRFToken': csrfToken } : {}),
+    };
+  };
+
   // Fetch BOM data from API
   const fetchBomData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("https://sellerp-backend.onrender.com/All_Masters/api/bom-items/");
+      const response = await fetch("https://sellerp-backend.onrender.com/All_Masters/api/bom-items/", {
+        headers: getAuthHeaders(),
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -74,10 +93,7 @@ const BomRouting = () => {
 
         const response = await fetch(url, {
           method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            // Add Authorization header here if your API needs it
-          },
+          headers: getAuthHeaders(),
         });
 
         if (response.ok) {
