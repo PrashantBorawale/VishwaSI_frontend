@@ -51,13 +51,27 @@ export const registerUser = async (userData) => {
 
 
 // Login API integration
-export const 
-loginUser = async (username, password,year) => {
+export const loginUser = async (username, password, year) => {
   try {
+    const getCookie = (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    };
+    const csrfToken = getCookie("csrftoken");
+
+    const headers = {
+      "Content-Type": "application/json",
+      ...(csrfToken ? { "X-CSRFToken": csrfToken } : {}),
+    };
+
     const response = await axios.post(`${BASE_URL}api/login/`, {
       username,
       password,
       year,
+    }, {
+      headers,
     });
 
     // Return the response data
