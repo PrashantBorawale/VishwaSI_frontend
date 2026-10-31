@@ -19,10 +19,28 @@ const JobworkInwardChallanList = () => {
         setSideNavOpen((prevState) => !prevState);
     };
 
+    const getAuthHeaders = () => {
+        const token = localStorage.getItem("accessToken") || localStorage.getItem("token") || localStorage.getItem("authToken");
+        const getCookie = (name) => {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        };
+        const csrfToken = getCookie("csrftoken");
+        return {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            ...(csrfToken ? { "X-CSRFToken": csrfToken } : {}),
+        };
+    };
+
     const fetchInwardChallanList = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://sellerp-backend.onrender.com/Store/JobworkInwardChallan/');
+            const response = await fetch('https://sellerp-backend.onrender.com/Store/JobworkInwardChallan/', {
+                headers: getAuthHeaders(),
+            });
             const data = await response.json();
             console.log('Fetched Jobwork data:', data);
 
@@ -68,6 +86,7 @@ const JobworkInwardChallanList = () => {
         try {
             const response = await fetch(`https://sellerp-backend.onrender.com/Store/JobworkInwardChallan/${id}/`, {
                 method: 'DELETE',
+                headers: getAuthHeaders(),
             });
             if (response.ok) {
                 toast.success("Deleted successfully!");

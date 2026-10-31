@@ -50,6 +50,22 @@ const JobworkInwardChallan = () => {
     ParticularNatureOfProcess: "",
   });
 
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("accessToken") || localStorage.getItem("token") || localStorage.getItem("authToken");
+    const getCookie = (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    };
+    const csrfToken = getCookie("csrftoken");
+    return {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(csrfToken ? { "X-CSRFToken": csrfToken } : {}),
+    };
+  };
+
   const toggleSideNav = () => {
     setSideNavOpen((prevState) => !prevState);
   };
@@ -441,9 +457,7 @@ const JobworkInwardChallan = () => {
         "https://sellerp-backend.onrender.com/Store/JobworkInwardChallan/",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: getAuthHeaders(),
           body: JSON.stringify(payload),
         }
       );
