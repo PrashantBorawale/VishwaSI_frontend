@@ -39,7 +39,14 @@ window.fetch = async function (resource, config = {}) {
   const token = localStorage.getItem("accessToken") || localStorage.getItem("token") || localStorage.getItem("authToken");
   const csrfToken = getCookie("csrftoken");
 
-  let headers = config.headers ? new Headers(config.headers) : new Headers();
+  let headers;
+  if (config.headers) {
+    headers = new Headers(config.headers);
+  } else if (typeof Request !== "undefined" && resource instanceof Request) {
+    headers = new Headers(resource.headers);
+  } else {
+    headers = new Headers();
+  }
 
   if (token && !headers.has("Authorization")) {
     headers.set("Authorization", `Bearer ${token}`);
